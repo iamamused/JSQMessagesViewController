@@ -218,10 +218,17 @@
 
 - (void)paste:(id)sender
 {
-    if (!self.pasteDelegate || [self.pasteDelegate composerTextView:self shouldPasteWithSender:sender]) {
+    if ([self respondsToSelector:@selector(pasteDelegate:)]) {
+        if (!self.pasteDelegate || [self.pasteDelegate composerTextView:self shouldPasteWithSender:sender]) {
+            if ([super respondsToSelector:@selector(paste:)]) {
+                [super paste:sender];
+            }
+        }
+    } else if ([super respondsToSelector:@selector(paste:)]) {
         [super paste:sender];
     }
 }
+
 
 #pragma mark - Drawing
 
